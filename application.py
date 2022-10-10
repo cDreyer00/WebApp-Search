@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import sqlite3
 
 app = Flask(__name__)
@@ -12,6 +12,6 @@ def index():
 @app.route("/search")
 def search():
     query = request.args.get("q")
-    print(query)
-    results = db.execute("SELECT * FROM books WHERE title LIKE ?", ["%" + query + "%"])
-    return render_template("search.html", results=results)
+    results = db.execute("SELECT * FROM books WHERE title LIKE ?", ["%" + query + "%"]).fetchall()
+    print(results)
+    return jsonify(results)
